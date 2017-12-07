@@ -279,9 +279,9 @@ class KDiag implements IControlAutomaton {
     switch (k) {
       case 32 : reset();
         return;
-      case 91 : getNetwork().rotate(-0.01);
+      case 'o' : getNetwork().rotate(-0.01);
         return;
-      case 93 : getNetwork().rotate(0.01);
+      case 'p' : getNetwork().rotate(0.01);
         return;    
     } 
   }

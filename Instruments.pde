@@ -18,8 +18,8 @@ class OSCObservingInstrument implements ObservingInstrument {
   
   void playNote(float freq) {
     println("playNote " + freq);
-    OscMessage vol = new OscMessage("/ML");
-    OscMessage pitch = new OscMessage("/AL");   
+    OscMessage vol = new OscMessage("/velocity");
+    OscMessage pitch = new OscMessage("/pitch");   
     pitch.add(map(freq,0,1000,0,127));
     vol.add(map(freq,0,1000,0,127));
     oscP5.send(pitch, myRemoteLocation);   
