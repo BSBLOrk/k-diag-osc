@@ -319,4 +319,3 @@ class KDiag implements IControlAutomaton {
 
 }
  
-  
