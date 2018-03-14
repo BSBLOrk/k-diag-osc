@@ -203,8 +203,11 @@ class KDiag implements IControlAutomaton {
   ArrayList<ObservingInstrument> obis = new ArrayList<ObservingInstrument>();
 
   boolean playing = false;
+
+  boolean currentlyOn = true; 
+  
   int currentNode; 
-  int wait = 20;
+  int wait = 50;
   
   KDiag(int aRad, int noNodes, int arcsPerNode) { 
     recreateNetwork(aRad,noNodes,arcsPerNode); 
@@ -229,12 +232,18 @@ class KDiag implements IControlAutomaton {
   }
 
   boolean isPlaying() { return playing; }
-  void start() { playing = true; }
-  void stop() { playing = false; }  
+  void start() {
+    playing = true; 
+  }
+  void stop() { 
+    playing = false; 
+  }  
 
   void playNote(float freq) {
-    for (ObservingInstrument oi : obis) {
-      oi.playNote(freq);
+    if (isPlaying()) {
+      for (ObservingInstrument oi : obis) {
+        oi.playNote(freq);
+      }
     }
   }
   
@@ -248,7 +257,7 @@ class KDiag implements IControlAutomaton {
         Node node = network.getNode(currentNode);
         playNote(fs.corrected(fs.rawFreq(node.y)));      
       } catch (EndOfSequenceException e) {
-        println("End of sequence from " + currentNode);
+        //println("End of sequence from " + currentNode);
         currentNode = 0;
         kDiag.stop();      
         wait = 20;
@@ -266,6 +275,8 @@ class KDiag implements IControlAutomaton {
   }
 
   void struck(int x, int y) {
+    if (!currentlyOn) { return; }
+    
     int find = selected(x,y,320,240);
     
     if (find > -1) { 
@@ -282,7 +293,15 @@ class KDiag implements IControlAutomaton {
       case 91 : getNetwork().rotate(-0.01);
         return;
       case 93 : getNetwork().rotate(0.01);
-        return;    
+        return;
+      case 'a' : 
+        currentlyOn = true;
+        println("currentlyOn = true");
+        return;
+      case 'z' : 
+        currentlyOn = false;
+        println("currentlyOn = false");
+        return;
     } 
   }
 
